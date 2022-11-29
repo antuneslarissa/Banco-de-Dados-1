@@ -1,28 +1,75 @@
 a)     Listar a descrição da(s) cor(es) cadastrada(s) na
  base e que não apresenta nenhum veículo cadastrado;
-SELECT c.ds_cor
-FROM cor c, veiculo v
-WHERE v.cd_cor = c.cd_cor
+SELECT ds_cor
+FROM cor
+WHERE cd_cor NOT IN
+(SELECT cd_cor
+FROM veiculo)
 
 b)     Listar a placa e a descrição do modelo do(s) veículo(s) mais novo(s) cadastrado(s)
  - considerar o ano modelo. Atenção, pois poderá haver mais de um veículo;
+SELECT v.nr_placa, mo.ds_modelo
+FROM veiculo v, modelo mo
+WHERE v.cd_modelo = mo.cd_modelo
+AND v.nr_ano_mod =
+(SELECT max (nr_ano_mod) FROM veiculo)
 
 
 c)     Listar dados dos veículos: placa, descrição da marca,
  descrição do modelo que são movidos por mais de um combustível;
+SELECT v.nr_placa, ma.ds_marca, mo.ds_modelo
+FROM veiculo v, marca ma, modelo mo
+WHERE v.cd_modelo= mo.cd_modelo
+AND mo.cd_marca = ma.cd_marca
+AND nr_placa in (
+						SELECT nr_placa
+						FROM veiculo_combustivel
+						GROUP BY nr_placa
+						HAVING COUNT(*)>=2
+						)
+
+
 
 
 d)     Listar a descrição do(s) modelo(s) que possui(em) 
 o maior número de veículos cadastrado;
+SELECT mo.ds_modelo
+FROM veiculo v, modelo mo
+WHERE v.cd_modelo= mo.cd_modelo
+GROUP BY mo.ds_modelo
+HAVING COUNT(*) >= ALL (SELECT COUNT(*)
+								FROM veiculo
+								GROUP BY cd_modelo)
 
 
 e)     Listar a descrição da marca que possui o
  menor número de modelos cadastrados;
-
+SELECT ma.ds_marca
+FROM veiculo v, modelo mo, marca ma
+WHERE v.cd_modelo = mo.cd_modelo
+	AND mo.cd_marca = ma.cd_marca
+GROUP BY ma.ds_marca
+HAVING COUNT(*)<= ALL(
+								SELECT COUNT(*) qtde_veic_marca
+								FROM modelo mo
+								GROUP BY mo.cd_marca)
 
 f)      Listar a descrição do acessório mais popular (que mais é encontrado) entre os veículos fabricados.
  Atenção, pois poderá haver mais de um acessório ranqueado com mais...;
-
+SELECT a.ds_acessorio
+FROM acessorio a, veiculo_acessorio va
+WHERE a.cd_acessorio = va.cd_acessorio
+GROUP BY a.ds_acessorio
+HAVING COUNT(*)<= ALL(
+								SELECT COUNT(*)
+								FROM veiculo_acessorio
+								GROUP BY cd_acessorio)
 
 g)     Listar qual(is) acessórios não estão associados
  a veículos fabricados anterior ao ano de 2015;
+SELECT ds_acessorio
+FROM acessorio
+WHERE cd_acessorio NOT IN (SELECT va.cd_acessorio
+FROM veiculo v, veiculo_acessorio va
+WHERE v.nr_placa=va.nr_placa
+AND v.nr_ano_fab <= 2015)
