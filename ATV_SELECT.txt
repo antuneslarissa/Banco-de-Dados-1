@@ -1,0 +1,60 @@
+LARISSA ZÓZIMO ANTUNES
+
+a) Listar todos os dados dos modelos disponíveis ordenados pela descrição;
+SELECT ds_modelo
+FROM modelo;
+
+b)Listar a descrição de todas as marcas disponíveis;
+SELECT ds_marca
+FROM marca;
+
+c)Listar qual(is) proprietário(s) residem nos estados de "SC" ou "PR";
+SELECT nm_proprietario  
+FROM proprietario
+WHERE sg_uf = "SC"
+
+d)Listar qual(is) proprietário(s) não possuem e-mail, mas que possuem número de telefone cadastrado;
+SELECT nm_proprietario  
+FROM proprietario
+WHERE ds_email is NULL AND nr_telefone > 0;
+
+e)Listar qual(is) proprietário(s) apresentam "Silva" no nome;
+SELECT nm_proprietario 
+FROM proprietario
+WHERE nm_proprietario LIKE '%Silva%';
+
+f)Listar as informações do(s) veículo(s) que apresenta(m) ano de fabricação diferente do ano modelo;
+SELECT nr_placa, cd_cor, cd_proprietario, cd_modelo, nr_ano_fab, nr_ano_mod, qt_km_rodado, qt_portas, ds_observacao
+FROM veiculo
+WHERE nr_ano_fab <> nr_ano_mod;
+
+g)Listar o número da placa, o ano do modelo, a quantidade de km rodados e a quantidade de portas dos veículos fabricados após ano de 2000, inclusive ano 2000;
+SELECT nr_placa, nr_ano_mod, qt_km_rodado, qt_portas
+FROM veiculo
+WHERE nr_ano_fab >= 2000;
+
+h)Listar o número da placa do(s) veículo(s) que não possui(em) uma informação adicional cadastrada (coluna observação);
+SELECT nr_placa
+FROM veiculo
+WHERE ds_observacao IS null;
+
+i)Listar os dados do(s) veículo(s) que apresenta(m) quatro portas ou mais, ordenados pelo ano do modelo descendente;
+SELECT nr_placa, cd_cor, cd_proprietario, cd_modelo, nr_ano_fab, nr_ano_mod, qt_km_rodado, qt_portas, ds_observacao
+FROM veiculo
+WHERE qt_portas >= 4 
+ORDER BY nr_ano_mod desc;
+
+j)Listar todos os acessórios ordenados pela descrição;
+SELECT cd_acessorio
+FROM acessorio 
+ORDER BY ds_acessorio;
+
+k)Listar o número da placa do veículo, ano de fabricação e modelo do(s) veículos fabricados a partir de 2015, com km rodada menor de 50000, com 4 portas ou mais e que não possui(am) observações;
+SELECT nr_placa, nr_ano_fab, nr_ano_mod
+FROM veiculo
+WHERE nr_ano_fab AND nr_ano_mod >= 2015 AND qt_km_rodado < 50000 AND qt_portas >= 4 AND ds_observacao IS null;
+
+l)Listar o nome do(s) proprietário(s) que residem em um bairro em que o nome tenha a palavra "Novo" ou "Nova" e que a UF seja de "SC";
+SELECT nm_proprietario
+FROM proprietario
+WHERE ds_bairro LIKE '%Novo%' OR ds_bairro LIKE '%Nova%' AND sg_uf = "SC";

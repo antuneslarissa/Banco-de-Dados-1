@@ -1,0 +1,28 @@
+a)     Listar a descrição da(s) cor(es) cadastrada(s) na
+ base e que não apresenta nenhum veículo cadastrado;
+SELECT c.ds_cor
+FROM cor c, veiculo v
+WHERE v.cd_cor = c.cd_cor
+
+b)     Listar a placa e a descrição do modelo do(s) veículo(s) mais novo(s) cadastrado(s)
+ - considerar o ano modelo. Atenção, pois poderá haver mais de um veículo;
+
+
+c)     Listar dados dos veículos: placa, descrição da marca,
+ descrição do modelo que são movidos por mais de um combustível;
+
+
+d)     Listar a descrição do(s) modelo(s) que possui(em) 
+o maior número de veículos cadastrado;
+
+
+e)     Listar a descrição da marca que possui o
+ menor número de modelos cadastrados;
+
+
+f)      Listar a descrição do acessório mais popular (que mais é encontrado) entre os veículos fabricados.
+ Atenção, pois poderá haver mais de um acessório ranqueado com mais...;
+
+
+g)     Listar qual(is) acessórios não estão associados
+ a veículos fabricados anterior ao ano de 2015;

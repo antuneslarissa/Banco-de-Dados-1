@@ -1,0 +1,31 @@
+Anotações BD
+
+
+SELECT *
+FROM proprietario
+
+
+SELECT MAX(cd_proprietario) AS maior, MIN(cd_proprietario) AS menor
+FROM proprietario
+
+SELECT AVG (nr_ano_fab) AS media_ano_veiculo
+FROM veiculo
+
+SELECT SUM(qt_km_rodado) total_km
+FROM veiculo
+
+SELECT ROUND (avg(qt_km_rodado), 0) AS arredondado,
+	TRUNCATE (AVG(qt_km_rodado), 1) AS trucando,
+	AVG (qt_km_rodado) sem funcao
+FROM veiculo
+
+SELECT max(nr_ano_fab) AS "mais novo", MIN(nr_ano_fab) AS "mais antigo"
+FROM veiculo
+
+----Sempre que usar uma função de grupo tal qual count(*), deve se utilizar group by----
+
+SELECT nr_ano_mod, COUNT(*)
+FROM veiculo
+GROUP BY nr_ano_mod
+
+

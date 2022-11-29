@@ -1,0 +1,62 @@
+a)     Listar a média de km rodados entre os veículos cadastrados;
+SELECT AVG (qt_km_rodado)
+FROM veiculo
+
+b)     Listar o ano de fabricação do(s) veículo(s) mais novo e ano de fabricação do(s) veículo(s) mais antigo cadastrado na base de dados;
+SELECT  MAX(nr_ano_fab), MIN(nr_ano_fab)
+FROM veiculo
+
+c)     Listar o ano modelo do veículo com a respectiva quantidade de veículos correspondente ao ano listado;
+SELECT  nr_ano_mod, count(*)
+FROM veiculo
+Group by nr_ano_mod
+
+d)     Listar a descrição do combustível com a respectiva quantidade de veículos que apresentam o combustível, ordenando pelo maior número de veículos descendente;
+SELECT  ds_combustivel, COUNT(*)
+FROM combustivel
+Group by ds_combustivel
+
+e)     Listar a descrição do modelo com a respectiva quantidade de veículo(s) correspondente ao modelo listado;
+SELECT  ds_modelo, count(*)
+FROM modelo
+Group by ds_modelo
+
+--correção
+SELECT m.ds_modelo, COUNT(v.nr_placa) AS qtde_combustivel
+FROM modelo m, veiculo v
+WHERE v.cd_modelo = m.cd_modelo
+GROUP BY m.ds_modelo
+
+f)      Listar todas as marcas (descrição) disponíveis com o respetivo modelo (descrição), bem como a quantidade de veículo associada a marca e modelo listado;
+SELECT  ds_modelo, cd_marca, count(*)
+FROM modelo
+Group by ds_modelo
+
+---correção
+SELECT ma.ds_marca, mo.ds_modelo, COUNT(v.nr_placa) qtde_veiculos
+FROM veiculo v, modelo mo, marca ma
+WHERE v.cd_modelo = mo.cd_modelo
+	AND mo.cd_marca= ma.cd_marca
+GROUP BY ma.ds_marca, mo.ds_modelo
+
+
+g)     Listar a descrição do acessório com a respectiva quantidade de veículo que possuem o referido acessório listado.
+SELECT  ds_acessorio, count(*)
+FROM acessorio
+GROUP BY ds_acessorio
+
+h)     Listar o nome da localidade com a respectiva quantidade de proprietários vinculado(s) a cada localidade, restringindo ao estado de "SC";
+SELECT  nm_localidade, COUNT(*), nm_proprietario, count(*)
+FROM localidade, proprietario
+Group by nm_localidade, nm_proprietario
+HAVING COUNT(sg_uf = 'SC');
+
+i)      Listar dados dos veículos: placa, descrição da marca, descrição do modelo e quantidade de acessórios associado a cada veículo listado, sendo que os veículos devem apresentar dois ou mais acessórios.
+SELECT  nr_placa, COUNT(*), ds_marca, COUNT(*), ds_modelo, COUNT(*), ds_acessorio, count(*)
+FROM veiculo, marca, modelo, acessorio
+GROUP BY nr_placa, ds_marca, ds_modelo, ds_acessorio
+
+j)     Listar dados dos veículos: placa, descrição da marca, descrição do modelo e quantidade de combustíveis associados a cada veículo listado.
+SELECT ds_marca, ds_modelo, cd_combustivel , count(*)
+FROM veiculo, marca, modelo, veiculo_combustivel
+GROUP BY  ds_marca, ds_modelo, cd_combustivel

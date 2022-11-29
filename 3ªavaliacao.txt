@@ -1,0 +1,88 @@
+Crie um arquivo no bloco de notas (ou outro de sua preferência - recomendo o notepad ++). Construa sentenças SQL para atender as seguintes questões:
+
+a) Criar as tabelas com as respectivas restrições de PK (chave primária) e FK (chave estrangeria).
+ Não utilize recurso de geração de script a partir do MER de nenhum ferramenta CASE. Faça manualmente as instruções;
+CREATE TABLE produto(
+	cd_produto INTEGER,
+	cd_categoria INTEGER,
+	nm_produto VARCHAR(50),
+	qt_estoque INTEGER,
+	vl_produto DECIMAL(8,2),
+	primary key (cd_produto),
+	foreign key (cd_categoria) references categoria(cd_categoria)
+);
+
+CREATE TABLE categoria(
+	cd_categoria INTEGER,
+	ds_categoria VARCHAR(50),
+	primary key (cd_categoria)
+);
+
+
+CREATE TABLE orcamento(
+	nr_orcamento integer,
+	dt_emissao date,
+	vl_total decimal(8,2),
+	primary key (nr_orcamento)
+);
+
+CREATE TABLE item_orcamento(
+	nr_orcamento INTEGER,
+	cd_produto INTEGER,
+	qt_produto INTEGER,
+	vl_produto DECIMAL(8,2),
+	vl_total_item DECIMAL(8,2),
+	CONSTRAINT item_orcamento_pk PRIMARY KEY (nr_orcamento,cd_produto)
+);
+
+b) Criar uma regra (restrição) para não permitir que seja cadastrado nomes de produtos idênticos (dica: unique key)
+ALTER TABLE produto
+   ADD CONSTRAINT nm_produto_uk UNIQUE (nm_produto);
+
+c) Inserir registros das tabelas (mínimo): 05 categorias, 10 produtos, 05 orçamentos (com data de emissão entre os dias 01 e 10/11), 
+com diferentes produtos e quantidades de produtos associados (tabela item_pedido);
+INSERT into categoria(cd_categoria, ds_categoria) VALUES (1, 'gourmet');
+INSERT into categoria(cd_categoria, ds_categoria) VALUES (2, 'tipo 1');
+INSERT into categoria(cd_categoria, ds_categoria) VALUES (3, 'tipo 2');
+INSERT into categoria(cd_categoria, ds_categoria) VALUES (4, 'tipo 3');
+INSERT into categoria(cd_categoria, ds_categoria) VALUES (5, 'tipo 4');
+
+INSERT into produto(cd_produto, nm_produto,qt_estoque,vl_produto, cd_categoria) VALUES (1, 'arroz', 100, 3.50, 2);
+INSERT into produto(cd_produto, nm_produto,qt_estoque,vl_produto, cd_categoria) VALUES (2, 'feijão', 100, 8.00,3);
+INSERT into produto(cd_produto, nm_produto,qt_estoque,vl_produto, cd_categoria) VALUES (3, 'leite', 90, 5.50, 1);
+INSERT into produto(cd_produto, nm_produto,qt_estoque,vl_produto, cd_categoria) VALUES (4, 'trigo', 80, 3.50, 5);
+INSERT into produto(cd_produto, nm_produto,qt_estoque,vl_produto, cd_categoria) VALUES (5, 'chocolate', 50, 6.50, 1);
+INSERT into produto(cd_produto, nm_produto,qt_estoque,vl_produto, cd_categoria) VALUES (6, 'óleo', 70, 8.90, 2);
+INSERT into produto(cd_produto, nm_produto,qt_estoque,vl_produto, cd_categoria) VALUES (7, 'macarrão', 90, 3.00, 4);
+INSERT into produto(cd_produto, nm_produto,qt_estoque,vl_produto, cd_categoria) VALUES (8, 'farinha', 60, 5.00, 4);
+INSERT into produto(cd_produto, nm_produto,qt_estoque,vl_produto, cd_categoria) VALUES (9, 'sal', 100, 1.50, 5);
+INSERT into produto(cd_produto, nm_produto,qt_estoque,vl_produto, cd_categoria) VALUES (10, 'açúcar', 100, 3.00, 1);
+
+INSERT into orcamento(nr_orcamento, dt_emissao,vl_total) VALUES (1, 01/11/2022, 50.50);
+INSERT into orcamento(nr_orcamento, dt_emissao,vl_total) VALUES (2, 05/11/2022, 10.00);
+INSERT into orcamento(nr_orcamento, dt_emissao,vl_total) VALUES (3, 10/11/2022, 70.80);
+INSERT into orcamento(nr_orcamento, dt_emissao,vl_total) VALUES (4, 09/11/2022, 80.50);
+INSERT into orcamento(nr_orcamento, dt_emissao,vl_total) VALUES (5, 07/11/2022, 100.00);
+
+INSERT into item_orcamento(nr_orcamento, cd_produto,qt_produto,vl_total_item)VALUES (1, 1, 10, 35);
+INSERT into item_orcamento(nr_orcamento, cd_produto,qt_produto,vl_total_item)VALUES (2, 2, 5, 15);
+INSERT into item_orcamento(nr_orcamento, cd_produto,qt_produto,vl_total_item)VALUES (3, 4, 10, 40);
+INSERT into item_orcamento(nr_orcamento, cd_produto,qt_produto,vl_total_item)VALUES (4, 5, 3, 9);
+INSERT into item_orcamento(nr_orcamento, cd_produto,qt_produto,vl_total_item)VALUES (5, 6, 6, 30);
+
+
+d) Listar os produtos onde o valor está entre 10,00 e 50,00 (inclusive os valores limite);
+SELECT vp.nm_produto
+FROM produto vp
+WHERE vp.vl_produto >= 10 AND vp.vl_produto <= 50
+
+e) Listar todas as informações dos produtos com a respectiva descrição da categoria;
+SELECT vp.cd_produto, vp.nm_produto, vp.qt_estoque, vp.vl_produto, vp.cd_categoria, ca.ds_categoria
+FROM produto vp, categoria ca 
+
+f) Listar quais orçamentos foram emitidos entre os dias 01 e 05 de novembro de 2022 (dicas: 
+(1) ver coluna dt_emissao, (2) exemplo formato da data para comparação: '2021/11/01').
+
+SELECT o.nr_orcamento
+FROM orcamento o
+WHERE o.dt_emissao >= 2022/11/01 AND o.dt_emissao <= 2022/11/05
